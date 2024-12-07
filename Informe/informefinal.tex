@@ -1,4 +1,6 @@
 \documentclass{article}
+\usepackage[utf8]{inputenc} % Paquete para definir la codificación de entrada
+\usepackage[T1]{fontenc} % Paquete para definir la codificación de salida
 \usepackage{tocbibind} % Paquete para incluir el índice en el contenido
 \usepackage{listings} % Paquete para incluir código fuente
 \usepackage{xcolor} % Paquete para definir colores
@@ -84,6 +86,8 @@ El problema de optimización de rutas de transporte (Vehicle Routing Problem, VR
 
 El algoritmo de templado simulado puede ser utilizado para encontrar soluciones aproximadas a este problema. A continuación, se presenta una implementación en Python del algoritmo de templado simulado para resolver el VRP.
 
+\textbf{Implementación en Python}
+
 \lstset{language=Python, 
         basicstyle=\ttfamily\footnotesize, 
         keywordstyle=\color{blue}, 
@@ -100,7 +104,7 @@ El algoritmo de templado simulado puede ser utilizado para encontrar soluciones 
 import math
 import random
 
-# Funcion de costo (distancia total de la ruta)
+#Funcion de costo (distancia total de la ruta)
 def calculate_cost(route, distance_matrix):
     cost = 0
     for i in range(len(route) - 1):
@@ -157,6 +161,71 @@ best_route, best_cost = simulated_annealing(distance_matrix, initial_temp, cooli
 print("Mejor ruta:", best_route)
 print("Costo de la mejor ruta:", best_cost)
 \end{lstlisting}
+
+Este código proporciona una base para implementar el algoritmo de templado simulado en Python. Puedes adaptarlo y expandirlo según tus necesidades específicas.
+\subsection{El Problema del Viajante de Comercio (Traveling Salesman Problem, TSP)}
+\textbf{¿En qué consiste?}
+
+El problema del Viajante de Comercio es un clásico problema de optimización combinatoria que se define así:
+
+Dado un conjunto de n ciudades y las distancias entre cada par de ciudades, el objetivo es encontrar la ruta más corta que:
+\begin{itemize}
+    \item Visite cada ciudad exactamente una vez.
+    \item Regrese a la ciudad de origen.
+\end{itemize}
+
+\textbf{Ejemplo}
+
+Imagina que un vendedor necesita visitar 5 ciudades:
+
+\begin{itemize}
+    \item Ciudades: A, B, C, D, E.
+    \item Distancias: Una tabla o un mapa que muestra la distancia entre cada par de ciudades.
+\end{itemize}
+
+El viajante debe encontrar la ruta óptima que minimice la distancia total, visitando todas las ciudades y regresando al punto de partida.
+
+\textbf{Complejidad del Problema}
+
+El problema del Viajante es NP-completo, lo que significa que no existe (hasta ahora) un algoritmo eficiente que resuelva todas las instancias del problema en tiempo polinómico. La cantidad de posibles rutas crece factorialmente (\(n!\)) con el número de ciudades:
+
+\begin{itemize}
+    \item Para 5 ciudades: \(5! = 120\) rutas posibles.
+    \item Para 10 ciudades: \(10! = 3,628,800\) rutas posibles.
+\end{itemize}
+
+Por lo tanto, para un gran número de ciudades, no es factible calcular exhaustivamente todas las rutas posibles.
+
+\textbf{Resolviendo el Problema con Templado Simulado}
+
+El Templado Simulado (Simulated Annealing, SA) es una técnica heurística que encuentra soluciones cercanas a la óptima sin necesidad de explorar todas las rutas posibles. Es ideal para problemas como el TSP debido a su capacidad de escapar de mínimos locales durante la optimización.
+
+\textbf{Cómo funciona el Templado Simulado para el TSP}
+
+\begin{itemize}
+    \item \textbf{Representación de la Ruta:} Una ruta se representa como una permutación de las ciudades, por ejemplo:
+    \begin{itemize}
+        \item Ruta inicial: \(A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow A\).
+    \end{itemize}
+    \item \textbf{Función de Energía:} La energía es el costo total de la ruta, es decir, la suma de las distancias entre las ciudades en el orden actual.
+    \begin{itemize}
+        \item Costo de la ruta = Distancia(\(A \rightarrow B\)) + Distancia(\(B \rightarrow C\)) + ... + Distancia(\(E \rightarrow A\)).
+    \end{itemize}
+    \item \textbf{Generación de Vecinos:} Un vecino se genera modificando ligeramente la ruta actual:
+    \begin{itemize}
+        \item Intercambiando dos ciudades.
+        \item Revirtiendo el orden de una subsección de la ruta.
+    \end{itemize}
+    \item \textbf{Aceptación de Vecinos:} Si el vecino tiene un costo menor (\(\Delta E < 0\)), se acepta como la nueva ruta. Si el vecino tiene un costo mayor (\(\Delta E > 0\)), se acepta con una probabilidad que depende de la diferencia de costo (\(\Delta E\)) y la temperatura (\(T\)):
+    \begin{equation}
+    P = e^{-\Delta E / T}
+    \end{equation}
+    Esto permite al algoritmo explorar soluciones subóptimas inicialmente para evitar quedar atrapado en mínimos locales.
+    \item \textbf{Reducción de la Temperatura:} La temperatura (\(T\)) se reduce gradualmente después de cada iteración (enfriamiento).
+    \item \textbf{Finalización:} El algoritmo termina cuando la temperatura alcanza un valor mínimo (\(T_{min}\)), devolviendo la mejor ruta encontrada.
+\end{itemize}
+
+\end{document}
 
 Este código proporciona una base para implementar el algoritmo de templado simulado en Python. Puedes adaptarlo y expandirlo según tus necesidades específicas.
 

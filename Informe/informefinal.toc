@@ -6,3 +6,4 @@
 \contentsline {subsection}{\numberline {4.1}Ventajas}{3}{}%
 \contentsline {subsection}{\numberline {4.2}Limitaciones}{4}{}%
 \contentsline {section}{\numberline {5}Caso Aplicativo}{4}{}%
+\contentsline {subsection}{\numberline {5.1}El Problema del Viajante de Comercio (Traveling Salesman Problem, TSP)}{5}{}%
