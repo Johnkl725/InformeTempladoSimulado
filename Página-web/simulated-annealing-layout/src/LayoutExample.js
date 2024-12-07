@@ -105,49 +105,23 @@ function LayoutExample() {
   }, []);
 
   return (
-    <div className="flex h-screen">
-      {/* Sección izquierda: Explicaciones */}
-      <div className="w-1/3 bg-gray-100 p-6 overflow-y-auto border-r">
-        <h2 className="text-2xl font-bold mb-4">Diseño mediante Templado Simulado</h2>
-        {step >= 1 && (
-          <p className="mb-4">
-            <strong>¿Qué es el Templado Simulado?</strong> Un algoritmo de optimización inspirado en el recocido metálico.
-          </p>
-        )}
-        {step >= 2 && (
-          <p className="mb-4">
-            <strong>¿En qué consiste?</strong> Optimiza la disposición de elementos en un espacio limitado.
-          </p>
-        )}
-        {step >= 3 && (
-          <ul className="list-disc list-inside space-y-2">
-            <li><strong>Paso 1:</strong> Generar una disposición inicial.</li>
-            <li><strong>Paso 2:</strong> Evaluar la calidad del diseño.</li>
-            <li><strong>Paso 3:</strong> Mejorar iterativamente la disposición.</li>
-            <li><strong>Paso 4:</strong> Repetir hasta que se alcance la temperatura mínima.</li>
-            <li><strong>Nota:</strong> La calidad se mide por la cantidad de solapamientos entre elementos.</li>
-          </ul>
-        )}
-      </div>
-
-      {/* Sección derecha: Visualización */}
-      <div className="w-2/3 flex justify-center items-center bg-white">
-        <div className="relative w-[800px] h-[600px] border border-gray-300 bg-gray-50">
-          {layout.map((el, index) => (
-            <div
-              key={index}
-              className="absolute bg-white border border-black text-center text-xs"
-              style={{
-                width: el.width,
-                height: el.height,
-                left: el.x,
-                top: el.y,
-              }}
-            >
-              {el.name}
-            </div>
-          ))}
-        </div>
+    <div className="flex h-screen justify-center items-center">
+      {/* Contenedor centrado */}
+      <div className="relative w-[800px] h-[600px] border border-gray-300 bg-gray-50 flex justify-center items-center">
+        {layout.map((el, index) => (
+          <div
+            key={index}
+            className="absolute bg-white border border-black text-center text-xs"
+            style={{
+              width: el.width,
+              height: el.height,
+              left: el.x,
+              top: el.y,
+            }}
+          >
+            {el.name}
+          </div>
+        ))}
       </div>
     </div>
   );

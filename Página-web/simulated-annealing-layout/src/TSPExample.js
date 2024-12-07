@@ -6,6 +6,11 @@ const cities = [
   { name: "City C", x: 500, y: 100 },
   { name: "City D", x: 700, y: 300 },
   { name: "City E", x: 200, y: 500 },
+  { name: "City F", x: 400, y: 200 },
+  { name: "City G", x: 600, y: 400 },
+  { name: "City H", x: 800, y: 100 },
+  { name: "City I", x: 100, y: 600 },
+  { name: "City J", x: 300, y: 100 },
 ];
 
 const calculateDistance = (city1, city2) => {
@@ -29,10 +34,10 @@ const generateNeighborPath = (path) => {
   return newPath;
 };
 
-const simulatedAnnealingPath = (initialPath, setPath) => {
-  let T = 100;
+const simulatedAnnealingPath = (initialPath, setPath, setDistance) => {
+  let T = 1000;
   const T_min = 0.01;
-  const alpha = 0.9;
+  const alpha = 0.95;
 
   let currentPath = initialPath;
   let currentDistance = calculateTotalDistance(currentPath);
@@ -63,6 +68,7 @@ const simulatedAnnealingPath = (initialPath, setPath) => {
     }
 
     setPath(currentPath);
+    setDistance(currentDistance);
     T *= alpha;
   }, 500);
 
@@ -71,30 +77,37 @@ const simulatedAnnealingPath = (initialPath, setPath) => {
 
 function TSPExample() {
   const [path, setPath] = useState([]);
+  const [distance, setDistance] = useState(0);
 
   useEffect(() => {
     const initialPath = [...cities];
-    simulatedAnnealingPath(initialPath, setPath);
+    simulatedAnnealingPath(initialPath, setPath, setDistance);
   }, []);
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Simulando el problema del viajante</h2>
-      <div className="page relative w-[800px] h-[600px] border border-gray-300 mx-auto bg-gray-100">
+    <div className="p-4 flex flex-col items-center">
+      <h2 className="text-2xl font-bold mb-4">Problema del Viajante de Comercio</h2>
+      <p className="text-lg mb-4">Distancia Total: {distance.toFixed(2)} unidades</p>
+      <div className="relative w-[800px] h-[600px] border border-gray-300 bg-gray-100">
+        {/* Visualización de las ciudades */}
         {path.map((city, index) => (
           <div
             key={index}
-            className="city absolute border border-black rounded-full bg-blue-500 text-white flex items-center justify-center"
+            className={`city absolute border border-black rounded-full ${
+              index === 0 ? "bg-red-500" : "bg-blue-500"
+            } text-white flex items-center justify-center`}
             style={{
-              width: 20,
-              height: 20,
-              left: city.x - 10,
-              top: city.y - 10,
+              width: 30,
+              height: 30,
+              left: city.x - 15,
+              top: city.y - 15,
             }}
           >
             {city.name}
           </div>
         ))}
+
+        {/* Visualización de las rutas */}
         <svg className="absolute top-0 left-0 w-full h-full">
           {path.map((city, index) => {
             const nextCity = path[(index + 1) % path.length];
@@ -105,7 +118,8 @@ function TSPExample() {
                 y1={city.y}
                 x2={nextCity.x}
                 y2={nextCity.y}
-                stroke="black"
+                stroke={index === 0 ? "red" : "black"}
+                strokeWidth="2"
               />
             );
           })}
