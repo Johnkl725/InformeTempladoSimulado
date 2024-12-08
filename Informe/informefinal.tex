@@ -225,8 +225,231 @@ El Templado Simulado (Simulated Annealing, SA) es una técnica heurística que e
     \item \textbf{Finalización:} El algoritmo termina cuando la temperatura alcanza un valor mínimo (\(T_{min}\)), devolviendo la mejor ruta encontrada.
 \end{itemize}
 
+\section{Inspiración en el recocido metálico}
+
+\subsection{Similitudes entre el enfriamiento progresivo de metales y el comportamiento del algoritmo}
+
+El \textit{templado simulado} toma su fundamento del proceso de recocido metálico (\textit{annealing}), utilizado desde la antigüedad en la metalurgia para alterar las propiedades físicas y mecánicas de los materiales. Este procedimiento inspiró el diseño del algoritmo para resolver problemas de optimización combinatoria.
+
+\subsection{Recocido en metalurgia}
+
+\subsubsection{Proceso físico:}
+\begin{itemize}
+    \item Consiste en calentar un metal a temperaturas altas y luego enfriarlo lentamente.
+    \item Durante la fase de calentamiento, las partículas del material adquieren un estado de alta energía, reorganizándose de manera aleatoria dentro de su estructura cristalina.
+    \item Al enfriar de forma progresiva, las partículas se asientan en configuraciones más estables y óptimas, reduciendo la energía total del sistema.
+\end{itemize}
+
+\subsubsection{Objetivo del recocido:}
+\begin{itemize}
+    \item Incrementar la resistencia del material.
+    \item Reducir tensiones internas para prevenir fracturas o deformaciones.
+    \item Mejorar propiedades mecánicas, como la dureza y la ductilidad.
+\end{itemize}
+
+\section{Analogía con el algoritmo de templado simulado}
+
+\subsection{Sistema térmico vs. sistema de optimización:}
+\begin{itemize}
+    \item En el recocido metálico, el sistema físico es el material, y la \textit{energía} representa el nivel de tensión en su estructura.
+    \item En el algoritmo, el sistema corresponde a un espacio de soluciones, y la \textit{energía} se traduce como el costo asociado a una solución.
+\end{itemize}
+
+\subsection{Fases del algoritmo y su relación con el recocido:}
+\begin{itemize}
+    \item \textbf{Calentamiento inicial:} Al igual que el recocido físico, el algoritmo comienza con una \textit{temperatura} alta, lo que permite explorar soluciones aleatorias con gran libertad.
+    \item \textbf{Enfriamiento gradual:} A medida que la temperatura disminuye, el sistema se orienta hacia soluciones más estables, rechazando cambios drásticos pero aceptando soluciones subóptimas bajo ciertas condiciones.
+\end{itemize}
+
+\subsection{Puntos clave de la analogía}
+
+\subsubsection{Estados del sistema:}
+\begin{itemize}
+    \item Cada posible configuración del material metálico en el recocido corresponde a una solución en el espacio de búsqueda del algoritmo.
+\end{itemize}
+
+\subsubsection{Enfriamiento controlado:}
+\begin{itemize}
+    \item Si el recocido físico se enfría demasiado rápido, el material puede cristalizar en estados no óptimos, resultando en fragilidad o imperfecciones.
+    \item De forma análoga, en el algoritmo, un enfriamiento brusco puede conducir a mínimos locales en lugar del óptimo global.
+\end{itemize}
+
+\section{Implicaciones teóricas}
+
+El éxito del algoritmo de templado simulado radica en el balance adecuado entre la exploración inicial del espacio de búsqueda (alta temperatura) y la explotación posterior de las mejores soluciones (baja temperatura). Este enfoque, inspirado directamente en el recocido metálico, proporciona una base robusta para su efectividad en problemas de optimización.
+
+\section{Funcionamiento del Algoritmo de Recocido Simulado}
+
+El algoritmo de recocido simulado se basa en los principios de la termodinámica aplicados al recocido de metales, en donde se busca minimizar la energía de un sistema al enfriarlo lentamente. Este procedimiento se traduce al ámbito de optimización combinatoria como un proceso iterativo para encontrar el óptimo global en un espacio de búsqueda.
+
+\subsection{Etapas del Algoritmo}
+\begin{enumerate}
+    \item \textbf{Inicialización:}
+    \begin{itemize}
+        \item Se define una \textit{solución inicial} ($S_0$) de manera aleatoria en el espacio de búsqueda.
+        \item Se establece una \textit{temperatura inicial} ($T_0$), que controla la probabilidad de aceptar soluciones peores.
+    \end{itemize}
+    
+    \item \textbf{Ciclo de Evaluación y Generación:}
+    \begin{itemize}
+        \item Se genera una \textit{solución vecina} ($S'$) a partir de $S_0$ mediante una ligera alteración (perturbación).
+        \item Se evalúan ambas soluciones usando la función objetivo $f(x)$ para determinar el cambio en el costo ($\Delta f = f(S') - f(S_0)$).
+    \end{itemize}
+    
+    \item \textbf{Criterio de Aceptación:}
+    \begin{itemize}
+        \item Si $f(S') < f(S_0)$, la solución vecina mejora la actual y se acepta.
+        \item Si $f(S') > f(S_0)$, se evalúa la probabilidad de aceptar la solución subóptima utilizando el \textit{criterio de Boltzmann:}
+        \[
+        P = \exp\left(-\frac{\Delta f}{T}\right)
+        \]
+        Un número aleatorio $r \in [0, 1]$ se compara con $P$. Si $P > r$, se acepta la nueva solución.
+    \end{itemize}
+    
+    \item \textbf{Condición de Parada:}
+    \begin{itemize}
+        \item El algoritmo finaliza cuando se alcanza una temperatura mínima ($T_f$) o un número máximo de iteraciones.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Pseudocódigo del Algoritmo}
+El pseudocódigo actualizado describe el funcionamiento del algoritmo de manera estructurada:
+
+\begin{verbatim}
+Función Simulated_Annealing()
+    T := T0 // Temperatura inicial
+    S := Generar_Solución_Inicial() // Solución inicial
+    Mientras (T > Tf y no alcanzar condición de parada)
+        S' := Generar_Solución_Vecina(S) // Generar nueva solución
+        Si (f(S') < f(S)) Entonces
+            S := S' // Aceptar la nueva solución
+        Sino
+            r := Aleatorio(0,1) // Generar número aleatorio
+            Si (r < exp(-Δf / T)) Entonces
+                S := S' // Aceptar con probabilidad P
+            Fin_Si
+        Fin_Si
+        T := Reducir_Temperatura(T) // Aplicar enfriamiento
+    Fin_Mientras
+    Retornar(S) // Devolver la mejor solución encontrada
+Fin_Función
+\end{verbatim}
+
+\subsection{Análisis del Criterio de Boltzmann}
+
+El \textit{criterio de Boltzmann} es el núcleo probabilístico que permite aceptar soluciones peores bajo ciertas condiciones, lo que ayuda a escapar de mínimos locales. Se analiza mediante las siguientes variables:
+
+\begin{enumerate}
+    \item \textbf{Impacto de $\Delta f$:}
+    \begin{itemize}
+        \item Si $\Delta f$ es pequeño ($S'$ es ligeramente peor que $S_0$), $P$ es alto, favoreciendo la aceptación.
+        \item Si $\Delta f$ es grande ($S'$ es significativamente peor), $P$ es bajo, reduciendo la probabilidad de aceptar.
+    \end{itemize}
+    
+    \item \textbf{Efecto de la Temperatura ($T$):}
+    \begin{itemize}
+        \item A altas temperaturas, $P$ es mayor, lo que fomenta saltos exploratorios amplios.
+        \item A bajas temperaturas, $P$ disminuye, restringiendo la aceptación a soluciones cercanas y afinando la búsqueda.
+    \end{itemize}
+    
+    \item \textbf{Relación entre Variables:}
+    \begin{itemize}
+        \item La probabilidad de aceptar soluciones peores disminuye exponencialmente con el tiempo, lo que asegura la convergencia del algoritmo hacia un óptimo global.
+    \end{itemize}
+\end{enumerate}
+
+\section{Escapar de Mínimos Locales}
+
+Un desafío recurrente en la optimización es quedar atrapado en \textit{mínimos locales}: soluciones que son mejores dentro de una pequeña región, pero no en todo el espacio de búsqueda. El templado simulado resuelve este problema de tres formas:
+
+\subsection{1. Aceptación de Soluciones Subóptimas:}
+\begin{itemize}
+    \item A diferencia de otros algoritmos, el templado simulado permite aceptar soluciones que empeoran temporalmente la calidad de la solución actual.
+    \item En las primeras etapas, cuando la \textit{temperatura} es alta, la probabilidad de aceptar estas soluciones es elevada, lo que permite al algoritmo explorar más ampliamente.
+    \item Este mecanismo ayuda a escapar de los mínimos locales tempranos, explorando otras regiones del espacio de búsqueda.
+\end{itemize}
+
+\subsection{2. Exploración y Explotación Balanceada:}
+\begin{itemize}
+    \item Al inicio (alta temperatura), el algoritmo fomenta la \textit{exploración} de soluciones diversas, moviéndose libremente por el espacio.
+    \item Conforme la temperatura disminuye, la búsqueda se vuelve más \textit{selectiva}, enfocándose en mejorar la solución encontrada (\textit{explotación}).
+\end{itemize}
+
+\subsection{3. Simulación de un Proceso Natural:}
+\begin{itemize}
+    \item Este comportamiento emula el recocido de metales: al enfriarse lentamente, las partículas del material se reorganizan hasta alcanzar una estructura estable y óptima.
+    \item En el algoritmo, las soluciones se \textit{estabilizan} conforme la temperatura disminuye, convergiendo hacia un óptimo global.
+\end{itemize}
+
+\section{Justificación Matemática de su Flexibilidad}
+
+El templado simulado está basado en principios matemáticos sólidos, como las \textit{cadenas de Markov} y las \textit{distribuciones de Boltzmann}.
+
+\subsection{1. Cadenas de Markov:}
+\begin{itemize}
+    \item Cada iteración del algoritmo representa un \textit{estado} en una cadena de Markov, donde las transiciones entre estados (soluciones) dependen únicamente del estado actual.
+    \item Esto garantiza que las decisiones de aceptación o rechazo de soluciones sean consistentes y controladas, proporcionando un modelo matemático predecible.
+\end{itemize}
+
+\subsection{2. Distribuciones de Probabilidad:}
+\begin{itemize}
+    \item La probabilidad de aceptar soluciones peores está definida por la fórmula:
+    \[
+    P = \exp\left(-\frac{\Delta f}{T}\right)
+    \]
+    \item Donde:
+    \begin{itemize}
+        \item $\Delta f$: Diferencia en el valor de la función objetivo entre la solución actual y la nueva.
+        \item $T$: Temperatura actual.
+    \end{itemize}
+    \item En etapas avanzadas, el algoritmo favorece soluciones de menor costo, asegurando un refinamiento progresivo hacia el óptimo global.
+\end{itemize}
+
+\subsection{3. Modelos de Enfriamiento Personalizables:}
+\begin{itemize}
+    \item Diferentes esquemas de enfriamiento permiten adaptar el algoritmo a las necesidades de cada problema:
+    \begin{itemize}
+        \item \textbf{Geométrico:} Fácil de implementar y eficiente.
+        \item \textbf{Logarítmico:} Más lento, pero garantiza la convergencia matemática al óptimo global.
+        \item \textbf{Lundy y Mees:} Ajusta la reducción de temperatura para equilibrar exploración y precisión.
+    \end{itemize}
+\end{itemize}
+
+\section{Justificación Matemática de su Convergencia}
+
+El diseño probabilístico del algoritmo garantiza que, con un enfriamiento suficientemente lento, converge al \textit{óptimo global}.
+
+\subsection{1. Convergencia Teórica:}
+\begin{itemize}
+    \item Al reducir la temperatura de forma progresiva, el sistema tiene tiempo suficiente para explorar y refinar las soluciones, evitando quedarse atrapado en mínimos locales.
+\end{itemize}
+
+\subsection{2. Modelos de Enfriamiento:}
+\begin{itemize}
+    \item El modelo \textit{logarítmico} garantiza la convergencia matemática, aunque a un ritmo lento.
+    \item El modelo \textit{geométrico} equilibra velocidad y efectividad, siendo práctico para muchas aplicaciones.
+\end{itemize}
+
+\section{Beneficios Adicionales}
+
+\subsection{1. Resiliencia a Problemas NP-Duros:}
+\begin{itemize}
+    \item Es aplicable a problemas donde los enfoques deterministas son inviables debido a la complejidad del espacio de búsqueda.
+\end{itemize}
+
+\subsection{2. Facilidad de Implementación:}
+\begin{itemize}
+    \item Aunque los fundamentos teóricos son complejos, el algoritmo en sí es simple de implementar. Solo requiere ajustar unos pocos parámetros clave:
+    \begin{itemize}
+        \item Temperatura inicial ($T_0$).
+        \item Tasa de enfriamiento ($\alpha$).
+        \item Función objetivo ($f(x)$).
+    \end{itemize}
+\end{itemize}
+
 \end{document}
 
 Este código proporciona una base para implementar el algoritmo de templado simulado en Python. Puedes adaptarlo y expandirlo según tus necesidades específicas.
+
 
 \end{document}
