@@ -2,7 +2,7 @@
 \contentsline {section}{\numberline {1}Introducción al Templado Simulado}{3}{}%
 \contentsline {section}{\numberline {2}Funcionamiento del Algoritmo}{3}{}%
 \contentsline {section}{\numberline {3}Parámetros del Algoritmo}{3}{}%
-\contentsline {section}{\numberline {4}Ventajas y Limitaciones}{3}{}%
+\contentsline {section}{\numberline {4}Análisis y Perspectivas}{3}{}%
 \contentsline {subsection}{\numberline {4.1}Ventajas}{3}{}%
 \contentsline {subsection}{\numberline {4.2}Limitaciones}{4}{}%
 \contentsline {section}{\numberline {5}Caso Aplicativo}{4}{}%
